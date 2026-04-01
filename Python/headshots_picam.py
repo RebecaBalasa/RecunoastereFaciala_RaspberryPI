@@ -1,35 +1,36 @@
 import cv2
-from picamera import PiCamera
-from picamera.array import PiRGBArray
+import os
+from picamera2 import Picamera2
 
-name = 'Caroline' #replace with your name
+name = 'Rebeca'
 
-cam = PiCamera()
-cam.resolution = (512, 304)
-cam.framerate = 10
-rawCapture = PiRGBArray(cam, size=(512, 304))
-    
+dataset_path = os.path.join("dataset", name)
+os.makedirs(dataset_path, exist_ok=True)
+
+cam = Picamera2()
+config = cam.create_preview_configuration(
+    main={"size": (512, 304), "format": "BGR888"}
+)
+cam.configure(config)
+cam.start()
+
 img_counter = 0
 
 while True:
-    for frame in cam.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-        image = frame.array
-        cv2.imshow("Press Space to take a photo", image)
-        rawCapture.truncate(0)
-    
-        k = cv2.waitKey(1)
-        rawCapture.truncate(0)
-        if k%256 == 27: # ESC pressed
-            break
-        elif k%256 == 32:
-            # SPACE pressed
-            img_name = "dataset/"+ name +"/image_{}.jpg".format(img_counter)
-            cv2.imwrite(img_name, image)
-            print("{} written!".format(img_name))
-            img_counter += 1
-            
-    if k%256 == 27:
-        print("Escape hit, closing...")
+    frame = cam.capture_array()
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+    cv2.imshow("Press Space to take a photo", frame)
+
+    k = cv2.waitKey(1)
+
+    if k % 256 == 27:
         break
+    elif k % 256 == 32:
+        img_name = "dataset/" + name + "/image_{}.jpg".format(img_counter)
+        cv2.imwrite(img_name, frame)
+        print("{} written!".format(img_name))
+        img_counter += 1
 
 cv2.destroyAllWindows()
+cam.stop()
