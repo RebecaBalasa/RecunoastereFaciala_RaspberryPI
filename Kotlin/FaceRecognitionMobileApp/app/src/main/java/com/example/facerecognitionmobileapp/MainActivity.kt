@@ -45,24 +45,22 @@ class MainActivity : ComponentActivity() {
             "https://facerecognition-41bc6-default-rtdb.europe-west1.firebasedatabase.app/"
         ).reference.child("detections")
 
-        // ✅ Abonare la topic
         FirebaseMessaging.getInstance().subscribeToTopic("alerts")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("FCM", "✅ Subscribed to alerts topic")
+                    Log.d("FCM", " Subscribed to alerts topic")
                 } else {
-                    Log.e("FCM", "❌ Subscription failed: ${task.exception?.message}")
+                    Log.e("FCM", " Subscription failed: ${task.exception?.message}")
                 }
             }
 
-        // ✅ Afișează tokenul FCM în Logcat pentru testare manuală
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val token = task.result
-                    Log.d("FCM_TOKEN", "📱 Token: $token")
+                    Log.d("FCM_TOKEN", " Token: $token")
                 } else {
-                    Log.e("FCM_TOKEN", "❌ Token fetch failed: ${task.exception?.message}")
+                    Log.e("FCM_TOKEN", " Token fetch failed: ${task.exception?.message}")
                 }
             }
 
@@ -89,11 +87,11 @@ fun NotificationPermissionHandler() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                Toast.makeText(context, "✅ Notificările sunt activate!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, " Notificările sunt activate!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(
                     context,
-                    "⚠️ Notificările sunt dezactivate. Activează-le din Setări > Aplicații.",
+                    " Notificările sunt dezactivate. Activează-le din Setări > Aplicații.",
                     Toast.LENGTH_LONG
                 ).show()
             }
