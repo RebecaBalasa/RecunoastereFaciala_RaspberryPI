@@ -51,11 +51,17 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
-
     // Firebase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+
+    // Image Loading
+    implementation(libs.coil.kt)
+    implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
